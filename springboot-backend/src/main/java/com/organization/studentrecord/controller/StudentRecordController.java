@@ -34,22 +34,21 @@ public class StudentRecordController {
 		return studentRecordRepo.findAll();
 	}
 
-	// create student record rest api
+	// create student record
 	@PostMapping("/create-student-record")
 	public StudentRecord createEmployee(@RequestBody StudentRecord studentRecord) {
 		return studentRecordRepo.save(studentRecord);
 	}
 
-	// get student by id rest api
+	// get student by id
 	@GetMapping("/get-student-record/{id}")
 	public ResponseEntity<StudentRecord> getStudentById(@PathVariable Long id) {
 		StudentRecord studentRecord = studentRecordRepo.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Student not exist with id :" + id));
 		return ResponseEntity.ok(studentRecord);
 	}
-	
-	// update student-record rest api
-	
+
+	// update student record
 	@PutMapping("/update-student-record/{id}")
 	public ResponseEntity<StudentRecord> updateStudent(@PathVariable Long id, @RequestBody StudentRecord studentRecordDetails){
 		StudentRecord studentRecord = studentRecordRepo.findById(id)
@@ -65,7 +64,7 @@ public class StudentRecordController {
 		return ResponseEntity.ok(updatedStudentRecord);
 	}
 
-	// delete student record rest api
+	// delete student record
 	@DeleteMapping("/delete-student-record/{id}")
 	public ResponseEntity<Map<String, Boolean>> deleteStudent(@PathVariable Long id){
 		StudentRecord studentRecord = studentRecordRepo.findById(id)
