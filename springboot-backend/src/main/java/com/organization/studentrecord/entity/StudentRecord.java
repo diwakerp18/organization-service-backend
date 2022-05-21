@@ -1,4 +1,4 @@
-package net.javaguides.springboot.model;
+package com.organization.studentrecord.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,13 +23,13 @@ public class StudentRecord {
 	@Column(name = "EmailId")
 	private String emailId;
 	@Column(name = "PhoneNumber")
-	private Integer phoneNumber;
+	private Long phoneNumber;
 	
 	public StudentRecord() {
 		
 	}
 	
-	public StudentRecord(String studentName, Integer rollNumber, String collegeName, String emailId, Integer phoneNumber) {
+	public StudentRecord(String studentName, Integer rollNumber, String collegeName, String emailId, Long phoneNumber) {
 		super();
 		this.studentName = studentName;
 		this.rollNumber = rollNumber;
@@ -50,10 +50,6 @@ public class StudentRecord {
 
 	public void setEmailId(String emailId) { this.emailId = emailId; }
 
-	public Integer getPhoneNumber() { return phoneNumber; }
-
-	public void setPhoneNumber(Integer phoneNumber) { this.phoneNumber = phoneNumber; }
-
 	public Integer getRollNumber() { return rollNumber; }
 
 	public void setRollNumber(Integer rollNumber) { this.rollNumber = rollNumber; }
@@ -61,5 +57,9 @@ public class StudentRecord {
 	public String getStudentName() { return studentName; }
 
 	public void setStudentName(String studentName) { this.studentName = studentName; }
+
+	public Long getPhoneNumber() { return phoneNumber; }
+
+	public void setPhoneNumber(Long phoneNumber) { this.phoneNumber = phoneNumber; }
 
 }

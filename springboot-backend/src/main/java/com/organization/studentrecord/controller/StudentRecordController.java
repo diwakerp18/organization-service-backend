@@ -1,4 +1,4 @@
-package net.javaguides.springboot.controller;
+package com.organization.studentrecord.controller;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,43 +16,43 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import net.javaguides.springboot.exception.ResourceNotFoundException;
-import net.javaguides.springboot.model.StudentRecord;
-import net.javaguides.springboot.repository.StudentRecordRepo;
+import com.organization.studentrecord.exception.ResourceNotFoundException;
+import com.organization.studentrecord.entity.StudentRecord;
+import com.organization.studentrecord.repository.StudentRecordRepo;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/v1/")
-public class EmployeeController {
+@RequestMapping("student-record")
+public class StudentRecordController {
 
 	@Autowired
-	private StudentRecordRepo employeeRepository;
+	private StudentRecordRepo studentRecordRepo;
 	
-	// get all employees
-	@GetMapping("/employees")
+	// get all student records
+	@GetMapping("/get-all-student-records")
 	public List<StudentRecord> getAllEmployees(){
-		return employeeRepository.findAll();
+		return studentRecordRepo.findAll();
 	}
 
-	// create employee rest api
-	@PostMapping("/employees")
+	// create student record rest api
+	@PostMapping("/create-student-record")
 	public StudentRecord createEmployee(@RequestBody StudentRecord studentRecord) {
-		return employeeRepository.save(studentRecord);
+		return studentRecordRepo.save(studentRecord);
 	}
 
-	// get employee by id rest api
-	@GetMapping("/employees/{id}")
-	public ResponseEntity<StudentRecord> getEmployeeById(@PathVariable Long id) {
-		StudentRecord studentRecord = employeeRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Employee not exist with id :" + id));
+	// get student by id rest api
+	@GetMapping("/get-student-record/{id}")
+	public ResponseEntity<StudentRecord> getStudentById(@PathVariable Long id) {
+		StudentRecord studentRecord = studentRecordRepo.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Student not exist with id :" + id));
 		return ResponseEntity.ok(studentRecord);
 	}
 	
-	// update employee rest api
+	// update student-record rest api
 	
-	@PutMapping("/employees/{id}")
-	public ResponseEntity<StudentRecord> updateEmployee(@PathVariable Long id, @RequestBody StudentRecord studentRecordDetails){
-		StudentRecord studentRecord = employeeRepository.findById(id)
+	@PutMapping("/update-student-record/{id}")
+	public ResponseEntity<StudentRecord> updateStudent(@PathVariable Long id, @RequestBody StudentRecord studentRecordDetails){
+		StudentRecord studentRecord = studentRecordRepo.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Student not exist with id :" + id));
 
 		studentRecord.setStudentName(studentRecordDetails.getStudentName());
@@ -61,17 +61,17 @@ public class EmployeeController {
 		studentRecord.setPhoneNumber(studentRecordDetails.getPhoneNumber());
 		studentRecord.setEmailId(studentRecordDetails.getEmailId());
 
-		StudentRecord updatedStudentRecord = employeeRepository.save(studentRecord);
+		StudentRecord updatedStudentRecord = studentRecordRepo.save(studentRecord);
 		return ResponseEntity.ok(updatedStudentRecord);
 	}
 
-	// delete employee rest api
-	@DeleteMapping("/employees/{id}")
-	public ResponseEntity<Map<String, Boolean>> deleteEmployee(@PathVariable Long id){
-		StudentRecord studentRecord = employeeRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Employee not exist with id :" + id));
+	// delete student record rest api
+	@DeleteMapping("/delete-student-record/{id}")
+	public ResponseEntity<Map<String, Boolean>> deleteStudent(@PathVariable Long id){
+		StudentRecord studentRecord = studentRecordRepo.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Student not exist with id :" + id));
 
-		employeeRepository.delete(studentRecord);
+		studentRecordRepo.delete(studentRecord);
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
 		return ResponseEntity.ok(response);
