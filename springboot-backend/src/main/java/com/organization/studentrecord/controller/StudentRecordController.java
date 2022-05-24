@@ -30,13 +30,13 @@ public class StudentRecordController {
 	
 	// get all student records
 	@GetMapping("/get-all-student-records")
-	public List<StudentRecord> getAllEmployees(){
+	public List<StudentRecord> getAllStudents(){
 		return studentRecordRepo.findAll();
 	}
 
 	// create student record
 	@PostMapping("/create-student-record")
-	public StudentRecord createEmployee(@RequestBody StudentRecord studentRecord) {
+	public StudentRecord createStudent(@RequestBody StudentRecord studentRecord) {
 		return studentRecordRepo.save(studentRecord);
 	}
 
