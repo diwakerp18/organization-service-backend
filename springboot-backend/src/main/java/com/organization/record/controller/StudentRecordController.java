@@ -1,9 +1,10 @@
-package com.organization.studentrecord.controller;
+package com.organization.record.controller;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.organization.record.entity.StudentRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,9 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.organization.studentrecord.exception.ResourceNotFoundException;
-import com.organization.studentrecord.entity.StudentRecord;
-import com.organization.studentrecord.repository.StudentRecordRepo;
+import com.organization.record.exception.ResourceNotFoundException;
+import com.organization.record.repository.StudentRecordRepo;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -31,20 +31,21 @@ public class StudentRecordController {
 	// get all student records
 	@GetMapping("/get-all-student-records")
 	public List<StudentRecord> getAllStudents(){
-		return studentRecordRepo.findAll();
+		return studentRecordRepo.findAllByDeletedFalse();
 	}
 
 	// create student record
 	@PostMapping("/create-student-record")
 	public StudentRecord createStudent(@RequestBody StudentRecord studentRecord) {
+		Boolean deleted = false;
+		studentRecord.setDeleted(deleted);
 		return studentRecordRepo.save(studentRecord);
 	}
 
 	// get student by id
 	@GetMapping("/get-student-record/{id}")
 	public ResponseEntity<StudentRecord> getStudentById(@PathVariable Long id) {
-		StudentRecord studentRecord = studentRecordRepo.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Student not exist with id :" + id));
+		StudentRecord studentRecord = studentRecordRepo.findByIdAndAndDeletedFalse(id);
 		return ResponseEntity.ok(studentRecord);
 	}
 
@@ -64,8 +65,8 @@ public class StudentRecordController {
 		return ResponseEntity.ok(updatedStudentRecord);
 	}
 
-	// delete student record
-	@DeleteMapping("/delete-student-record/{id}")
+	// Hard delete student record
+	@DeleteMapping("/hard-delete-student-record/{id}")
 	public ResponseEntity<Map<String, Boolean>> deleteStudent(@PathVariable Long id){
 		StudentRecord studentRecord = studentRecordRepo.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Student not exist with id :" + id));
@@ -75,6 +76,18 @@ public class StudentRecordController {
 		response.put("deleted", Boolean.TRUE);
 		return ResponseEntity.ok(response);
 	}
-	
-	
+
+	// Soft Delete student record
+	@PostMapping("/soft-delete-student-record/{id}")
+	public ResponseEntity<StudentRecord> softDeleteStudent(@PathVariable Long id) {
+
+		StudentRecord studentRecord = studentRecordRepo.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Student not exist with id :" + id));
+
+		Boolean deleted = true;
+		studentRecord.setDeleted(deleted);
+		studentRecordRepo.save(studentRecord);
+		return ResponseEntity.ok(studentRecord);
+	}
+
 }
