@@ -1,4 +1,4 @@
-package com.organization.studentrecord;
+package com.organization.record;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

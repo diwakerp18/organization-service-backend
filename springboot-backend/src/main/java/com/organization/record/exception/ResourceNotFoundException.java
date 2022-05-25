@@ -1,4 +1,4 @@
-package com.organization.studentrecord.exception;
+package com.organization.record.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
