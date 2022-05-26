@@ -37,8 +37,9 @@ public class StudentRecordController {
 	// create student record
 	@PostMapping("/create-student-record")
 	public StudentRecord createStudent(@RequestBody StudentRecord studentRecord) {
-		Boolean deleted = false;
-		studentRecord.setDeleted(deleted);
+		if (studentRecord.getDeleted() == null){
+		studentRecord.setDeleted(false);
+		}
 		return studentRecordRepo.save(studentRecord);
 	}
 
@@ -54,7 +55,9 @@ public class StudentRecordController {
 	public ResponseEntity<StudentRecord> updateStudent(@PathVariable Long id, @RequestBody StudentRecord studentRecordDetails){
 		StudentRecord studentRecord = studentRecordRepo.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Student not exist with id :" + id));
-
+		if (studentRecordDetails.getDeleted() == null){
+			studentRecordDetails.setDeleted(false);
+		}
 		studentRecord.setStudentName(studentRecordDetails.getStudentName());
 		studentRecord.setCollegeName(studentRecordDetails.getCollegeName());
 		studentRecord.setRollNumber(studentRecordDetails.getRollNumber());

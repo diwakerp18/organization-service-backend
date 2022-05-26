@@ -27,8 +27,9 @@ public class EmployeeRecordController {
     // create employee record
     @PostMapping("/create-employee-record")
     public EmployeeRecord createEmployee(@RequestBody EmployeeRecord employeeRecord) {
-        Boolean deleted = false;
-        employeeRecord.setDeleted(deleted);
+        if (employeeRecord.getDeleted() == null){
+        employeeRecord.setDeleted(false);
+        }
         return employeeRecordRepo.save(employeeRecord);
     }
 
@@ -44,7 +45,9 @@ public class EmployeeRecordController {
     public ResponseEntity<EmployeeRecord> updateEmployee(@PathVariable Long id, @RequestBody EmployeeRecord employeeRecordDetails){
         EmployeeRecord employeeRecord = employeeRecordRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not exist with id :" + id));
-
+        if (employeeRecord.getDeleted() == null){
+            employeeRecord.setDeleted(false);
+        }
         employeeRecord.setEmployeeName(employeeRecordDetails.getEmployeeName());
         employeeRecord.setCollegeName(employeeRecordDetails.getCollegeName());
         employeeRecord.setEmployeePosition(employeeRecordDetails.getEmployeePosition());
