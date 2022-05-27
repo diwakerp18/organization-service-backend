@@ -24,7 +24,7 @@ public class EmployeeRecordController {
 
     // get all employee records
     @GetMapping("/get-all-employee-records")
-    public List<EmployeeRecord> getAllEmployees(){
+    public List<EmployeeRecord> getAllEmployees() throws Exception {
         log.info("Fetching All Employee Records");
         List<EmployeeRecord> employeeRecords = employeeRecordRepo.findAllByDeletedFalse();
         if (isNull(employeeRecords)){
@@ -35,7 +35,7 @@ public class EmployeeRecordController {
 
     // create employee record
     @PostMapping("/create-employee-record")
-    public EmployeeRecord createEmployee(@RequestBody EmployeeRecord employeeRecord) {
+    public EmployeeRecord createEmployee(@RequestBody EmployeeRecord employeeRecord) throws Exception {
         log.info("creating new employee record");
         if (employeeRecord.getDeleted() == null){
         employeeRecord.setDeleted(false);
@@ -45,7 +45,7 @@ public class EmployeeRecordController {
 
     // get employee by id
     @GetMapping("/get-employee-record/{id}")
-    public ResponseEntity<EmployeeRecord> getEmployeeById(@PathVariable Long id) {
+    public ResponseEntity<EmployeeRecord> getEmployeeById(@PathVariable Long id) throws Exception {
         log.info("searching for employee with id :"+ id);
         EmployeeRecord employeeRecord = employeeRecordRepo.findByIdAndAndDeletedFalse(id);
         if (isNull(employeeRecord)){
@@ -56,7 +56,7 @@ public class EmployeeRecordController {
 
     // update employee record
     @PutMapping("/update-employee-record/{id}")
-    public ResponseEntity<EmployeeRecord> updateEmployee(@PathVariable Long id, @RequestBody EmployeeRecord employeeRecordDetails){
+    public ResponseEntity<EmployeeRecord> updateEmployee(@PathVariable Long id, @RequestBody EmployeeRecord employeeRecordDetails) throws Exception {
         EmployeeRecord employeeRecord = employeeRecordRepo.findByIdAndAndDeletedFalse(id);
         if (isNull(employeeRecord)){
             throw new OrganizationServiceException("No record found with id :"+ id);
@@ -76,7 +76,7 @@ public class EmployeeRecordController {
 
     // Hard delete employee record
     @DeleteMapping("/hard-delete-employee-record/{id}")
-    public ResponseEntity<Map<String, Boolean>> hardDeleteEmployee(@PathVariable Long id){
+    public ResponseEntity<Map<String, Boolean>> hardDeleteEmployee(@PathVariable Long id) throws Exception {
         log.info("hard deleting employee with id :"+ id);
         EmployeeRecord employeeRecord = employeeRecordRepo.findByIdAndAndDeletedFalse(id);
         if (isNull(employeeRecord)){
@@ -90,7 +90,7 @@ public class EmployeeRecordController {
 
     // Soft Delete Employee record
     @PostMapping("/soft-delete-employee-record/{id}")
-    public ResponseEntity<EmployeeRecord> softDeleteEmployee(@PathVariable Long id) {
+    public ResponseEntity<EmployeeRecord> softDeleteEmployee(@PathVariable Long id) throws Exception {
         log.info("soft deleting employee with id :"+ id);
         EmployeeRecord employeeRecord = employeeRecordRepo.findByIdAndAndDeletedFalse(id);
         if (isNull(employeeRecord)){

@@ -1,12 +1,22 @@
 package com.organization.record.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.checkerframework.checker.units.qual.C;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Date;
 
+@Builder
+@AllArgsConstructor
+@Data
 @Entity
 @Table(name = "StudentRecord")
 public class StudentRecord {
@@ -26,18 +36,25 @@ public class StudentRecord {
     private Long phoneNumber;
     @Column(name = "Deleted")
     private Boolean deleted;
+    @Column(name = "CreatedAt")
+    private Date createdAt;
+    @Column(name = "UpdatedAt")
+    private Date updatedAt;
 
     public StudentRecord() {
 
     }
 
-    public StudentRecord(String studentName, Integer rollNumber, String collegeName, String emailId, Long phoneNumber) {
+    public StudentRecord(String studentName, Integer rollNumber, String collegeName, String emailId, Long phoneNumber, Date createdAt, Date updatedAt, Boolean deleted) {
         super();
         this.studentName = studentName;
         this.rollNumber = rollNumber;
         this.collegeName = collegeName;
         this.emailId = emailId;
         this.phoneNumber = phoneNumber;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.deleted = deleted;
     }
 
     public Long getId() { return id; }
@@ -67,5 +84,13 @@ public class StudentRecord {
     public Boolean getDeleted() { return deleted; }
 
     public void setDeleted(Boolean deleted) { this.deleted = deleted; }
+
+    public Date getCreatedAt() { return createdAt; }
+
+    public void setCreatedAt(Date createdAt) { this.createdAt = createdAt; }
+
+    public Date getUpdatedAt() { return updatedAt; }
+
+    public void setUpdatedAt(Date updatedAt) { this.updatedAt = updatedAt; }
 
 }

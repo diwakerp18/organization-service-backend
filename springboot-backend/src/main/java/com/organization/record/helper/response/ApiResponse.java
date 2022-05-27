@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.slf4j.MDC;
+import org.springframework.http.HttpStatus;
 
 @Data
 @NoArgsConstructor
@@ -21,7 +22,7 @@ public class ApiResponse<T> {
     private String requestId = MDC.get(HeaderConstants.ORGANIZATION_REQUEST_ID);
     private T data;
 
-    public ApiResponse(T data) {
+    public ApiResponse(HttpStatus ok, T data, String successfully_updated_snOrgProfile) {
         this.data = data;
     }
 
