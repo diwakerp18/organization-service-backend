@@ -10,6 +10,5 @@ import java.util.List;
 @Repository
 public interface StudentRecordRepo extends JpaRepository<StudentRecord, Long>{
     List<StudentRecord> findAllByDeletedFalse();
-
     StudentRecord findByIdAndAndDeletedFalse(Long id);
 }

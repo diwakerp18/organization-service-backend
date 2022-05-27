@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.organization.record.entity.StudentRecord;
+import com.organization.record.exception.OrganizationServiceException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,10 +18,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.organization.record.exception.ResourceNotFoundException;
 import com.organization.record.repository.StudentRecordRepo;
 
+import static java.util.Objects.isNull;
+@Slf4j
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("student-record")
@@ -31,13 +33,19 @@ public class StudentRecordController {
 	// get all student records
 	@GetMapping("/get-all-student-records")
 	public List<StudentRecord> getAllStudents(){
-		return studentRecordRepo.findAllByDeletedFalse();
+		log.info("Fetching All Students Records");
+		List<StudentRecord> studentRecords = studentRecordRepo.findAllByDeletedFalse();
+		if (studentRecords.isEmpty()){
+			throw new OrganizationServiceException("Not A Single Record Found");
+		}
+		return studentRecords;
 	}
 
 	// create student record
 	@PostMapping("/create-student-record")
 	public StudentRecord createStudent(@RequestBody StudentRecord studentRecord) {
-		if (studentRecord.getDeleted() == null){
+		log.info("creating new student record");
+		if (isNull(studentRecord.getDeleted())){
 		studentRecord.setDeleted(false);
 		}
 		return studentRecordRepo.save(studentRecord);
@@ -46,15 +54,21 @@ public class StudentRecordController {
 	// get student by id
 	@GetMapping("/get-student-record/{id}")
 	public ResponseEntity<StudentRecord> getStudentById(@PathVariable Long id) {
+		log.info("searching for student with id :"+ id);
 		StudentRecord studentRecord = studentRecordRepo.findByIdAndAndDeletedFalse(id);
+		if (isNull(studentRecord)){
+			throw new OrganizationServiceException("No Record Found With id :"+ id);
+		}
 		return ResponseEntity.ok(studentRecord);
 	}
 
 	// update student record
 	@PutMapping("/update-student-record/{id}")
 	public ResponseEntity<StudentRecord> updateStudent(@PathVariable Long id, @RequestBody StudentRecord studentRecordDetails){
-		StudentRecord studentRecord = studentRecordRepo.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Student not exist with id :" + id));
+		StudentRecord studentRecord = studentRecordRepo.findByIdAndAndDeletedFalse(id);
+		if (isNull(studentRecord)){
+			throw new OrganizationServiceException("Student not exists with id :"+ id);
+		}
 		if (studentRecordDetails.getDeleted() == null){
 			studentRecordDetails.setDeleted(false);
 		}
@@ -71,9 +85,11 @@ public class StudentRecordController {
 	// Hard delete student record
 	@DeleteMapping("/hard-delete-student-record/{id}")
 	public ResponseEntity<Map<String, Boolean>> deleteStudent(@PathVariable Long id){
-		StudentRecord studentRecord = studentRecordRepo.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Student not exist with id :" + id));
-
+		log.info("hard deleting student with id :"+ id);
+		StudentRecord studentRecord = studentRecordRepo.findByIdAndAndDeletedFalse(id);
+		if (isNull(studentRecord)){
+			throw new OrganizationServiceException("Student not exists with id :"+ id);
+		}
 		studentRecordRepo.delete(studentRecord);
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
@@ -83,10 +99,11 @@ public class StudentRecordController {
 	// Soft Delete student record
 	@PostMapping("/soft-delete-student-record/{id}")
 	public ResponseEntity<StudentRecord> softDeleteStudent(@PathVariable Long id) {
-
-		StudentRecord studentRecord = studentRecordRepo.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Student not exist with id :" + id));
-
+		log.info("soft deleting student with id :"+ id);
+		StudentRecord studentRecord = studentRecordRepo.findByIdAndAndDeletedFalse(id);
+		if (isNull(studentRecord)){
+			throw new OrganizationServiceException("Student not exists with id :"+ id);
+		}
 		Boolean deleted = true;
 		studentRecord.setDeleted(deleted);
 		studentRecordRepo.save(studentRecord);
