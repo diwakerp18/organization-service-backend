@@ -20,16 +20,12 @@ import static java.util.Objects.isNull;
 @Service
 @Slf4j
 public class StudentRecordService {
-
     @Autowired
     StudentRecordRepo studentRecordRepo;
-
     @Autowired
     StudentRecordEntityToDtoConverter studentRecordEntityToDtoConverter;
-
     @Autowired
     StudentRecordDtoToEntityConverter studentRecordDtoToEntityConverter;
-
     @Autowired
     StudentRecordDtoToExistingEntityConverter studentRecordDtoToExistingEntityConverter;
 
@@ -46,6 +42,7 @@ public class StudentRecordService {
 
     public StudentRecordDto createStudentRecord(StudentRecordDto studentRecordDto) throws Exception {
         log.info("creating new student record");
+
         if(isNull(studentRecordDto)){
             throw new OrganizationServiceException("data is empty");
         }
@@ -61,7 +58,6 @@ public class StudentRecordService {
         StudentRecordDto studentRecordResponse = studentRecordEntityToDtoConverter.entityToDto(studentRecord);
 
         return studentRecordResponse;
-
     }
 
     public StudentRecordDto getStudentById(Long id) throws Exception {
@@ -126,7 +122,6 @@ public class StudentRecordService {
         }
 
         return studentRecordRepo.findFirstByRollNumberAndAndDeletedFalse(rollNumber);
-
     }
 
     private void setDefaultValues(StudentRecordDto studentRecordDto) {
@@ -134,7 +129,6 @@ public class StudentRecordService {
         if (isNull(studentRecordDto.getDeleted())){
             studentRecordDto.setDeleted(StudentRecordConstants.DEFAULT_DELETED);
         }
-
     }
 
 }

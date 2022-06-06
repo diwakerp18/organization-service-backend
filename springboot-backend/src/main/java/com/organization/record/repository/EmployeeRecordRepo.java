@@ -9,6 +9,5 @@ import java.util.List;
 @Repository
 public interface EmployeeRecordRepo extends JpaRepository<EmployeeRecord, Long> {
     List<EmployeeRecord> findAllByDeletedFalse();
-
     EmployeeRecord findByIdAndAndDeletedFalse(Long id);
 }

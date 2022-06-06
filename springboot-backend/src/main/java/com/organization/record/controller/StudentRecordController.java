@@ -40,10 +40,9 @@ public class StudentRecordController {
 	@PostMapping("/create-student-record")
 	public StudentRecordDto createStudentRecord(@Valid @RequestBody StudentRecordDto studentRecordDto) throws  Exception {
 		StudentRecordDto retVal = studentRecordService.createStudentRecord(studentRecordDto);
-
-		if (isNull(retVal))
+		if (isNull(retVal)){
 			throw new OrganizationServiceException("Record Creation failed");
-
+		}
 		return retVal;
 	}
 

@@ -1,12 +1,20 @@
 package com.organization.record.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Date;
 
+@Builder
+@AllArgsConstructor
+@Data
 @Entity
 @Table(name = "EmployeeRecord")
 public class EmployeeRecord {
@@ -26,18 +34,25 @@ public class EmployeeRecord {
     private Long phoneNumber;
     @Column(name = "Deleted")
     private Boolean deleted;
+    @Column(name = "CreatedAt")
+    private Date createdAt;
+    @Column(name = "UpdatedAt")
+    private Date updatedAt;
 
     public EmployeeRecord() {
 
     }
 
-    public EmployeeRecord(String employeeName, String employeePosition, String collegeName, String emailId, Long phoneNumber) {
+    public EmployeeRecord(String employeeName, String employeePosition, String collegeName, String emailId, Long phoneNumber, Date createdAt, Date updatedAt, Boolean deleted) {
         super();
         this.employeeName = employeeName;
         this.employeePosition = employeePosition;
         this.collegeName = collegeName;
         this.emailId = emailId;
         this.phoneNumber = phoneNumber;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.deleted = deleted;
     }
 
     public Long getId() {
@@ -89,4 +104,12 @@ public class EmployeeRecord {
     public Boolean getDeleted() { return deleted; }
 
     public void setDeleted(Boolean deleted) { this.deleted = deleted; }
+
+    public Date getCreatedAt() { return createdAt; }
+
+    public void setCreatedAt(Date createdAt) { this.createdAt = createdAt; }
+
+    public Date getUpdatedAt() { return updatedAt; }
+
+    public void setUpdatedAt(Date updatedAt) { this.updatedAt = updatedAt; }
 }
