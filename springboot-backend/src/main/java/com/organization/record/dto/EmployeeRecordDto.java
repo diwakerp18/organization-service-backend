@@ -17,7 +17,8 @@ public class EmployeeRecordDto {
 
     private Long id;
     private String employeeName;
-    private String employeePosition;
+    private String role;
+    private String branch;
     private String collegeName;
     private String emailId;
     private Long phoneNumber;

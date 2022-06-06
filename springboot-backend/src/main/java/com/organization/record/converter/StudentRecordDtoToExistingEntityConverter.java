@@ -17,6 +17,9 @@ public class StudentRecordDtoToExistingEntityConverter {
         studentRecord.setRollNumber(studentRecordDto.getRollNumber());
         studentRecord.setEmailId(studentRecordDto.getEmailId());
         studentRecord.setPhoneNumber(studentRecordDto.getPhoneNumber());
+        studentRecord.setBatch(studentRecordDto.getBatch());
+        studentRecord.setBranch(studentRecordDto.getBranch());
+        studentRecord.setRole(studentRecordDto.getRole());
         studentRecord.setUpdatedAt(new Timestamp(new Date().getTime()));
 
         return studentRecord;

@@ -31,6 +31,12 @@ public class StudentRecord {
     private String emailId;
     @Column(name = "PhoneNumber")
     private Long phoneNumber;
+    @Column(name = "Branch")
+    private String branch;
+    @Column(name = "Role")
+    private String role;
+    @Column(name = "Batch")
+    private String batch;
     @Column(name = "Deleted")
     private Boolean deleted;
     @Column(name = "CreatedAt")
@@ -42,13 +48,16 @@ public class StudentRecord {
 
     }
 
-    public StudentRecord(String studentName, Integer rollNumber, String collegeName, String emailId, Long phoneNumber, Date createdAt, Date updatedAt, Boolean deleted) {
+    public StudentRecord(String studentName, Integer rollNumber, String collegeName, String emailId, Long phoneNumber, String role, String batch, String branch, Date createdAt, Date updatedAt, Boolean deleted) {
         super();
         this.studentName = studentName;
         this.rollNumber = rollNumber;
         this.collegeName = collegeName;
         this.emailId = emailId;
         this.phoneNumber = phoneNumber;
+        this.role = role;
+        this.batch = batch;
+        this.branch = branch;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.deleted = deleted;
@@ -89,5 +98,17 @@ public class StudentRecord {
     public Date getUpdatedAt() { return updatedAt; }
 
     public void setUpdatedAt(Date updatedAt) { this.updatedAt = updatedAt; }
+
+    public String getRole() { return role; }
+
+    public void setRole(String role) { this.role = role; }
+
+    public String getBatch() { return batch; }
+
+    public void setBatch(String batch) { this.batch = batch; }
+
+    public String getBranch() { return branch; }
+
+    public void setBranch(String branch) { this.branch = branch; }
 
 }

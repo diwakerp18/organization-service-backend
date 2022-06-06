@@ -16,6 +16,9 @@ public class StudentRecordDtoToEntityConverter {
                 .studentName(studentRecordDto.getStudentName())
                 .phoneNumber(studentRecordDto.getPhoneNumber())
                 .rollNumber(studentRecordDto.getRollNumber())
+                .batch(studentRecordDto.getBatch())
+                .role(studentRecordDto.getRole())
+                .branch(studentRecordDto.getBranch())
                 .deleted(studentRecordDto.getDeleted())
                 .build();
 

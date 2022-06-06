@@ -1,9 +1,7 @@
 package com.organization.record.converter;
 
 import com.organization.record.dto.EmployeeRecordDto;
-import com.organization.record.dto.StudentRecordDto;
 import com.organization.record.entity.EmployeeRecord;
-import com.organization.record.entity.StudentRecord;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -16,7 +14,8 @@ public class EmployeeRecordDtoToExistingEntityConverter {
 
         employeeRecord.setEmployeeName(employeeRecordDto.getEmployeeName());
         employeeRecord.setCollegeName(employeeRecordDto.getCollegeName());
-        employeeRecord.setEmployeePosition(employeeRecordDto.getEmployeePosition());
+        employeeRecord.setRole(employeeRecordDto.getRole());
+        employeeRecord.setBranch(employeeRecordDto.getBranch());
         employeeRecord.setEmailId(employeeRecordDto.getEmailId());
         employeeRecord.setPhoneNumber(employeeRecordDto.getPhoneNumber());
         employeeRecord.setUpdatedAt(new Timestamp(new Date().getTime()));

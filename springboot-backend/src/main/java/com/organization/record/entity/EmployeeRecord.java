@@ -24,14 +24,16 @@ public class EmployeeRecord {
     private Long id;
     @Column(name = "EmployeeName")
     private String employeeName;
-    @Column(name = "EmployeePosition")
-    private String employeePosition;
+    @Column(name = "Role")
+    private String role;
     @Column(name = "CollegeName")
     private String collegeName;
     @Column(name = "EmailId")
     private String emailId;
     @Column(name = "PhoneNumber")
     private Long phoneNumber;
+    @Column(name = "Branch")
+    private String branch;
     @Column(name = "Deleted")
     private Boolean deleted;
     @Column(name = "CreatedAt")
@@ -43,13 +45,14 @@ public class EmployeeRecord {
 
     }
 
-    public EmployeeRecord(String employeeName, String employeePosition, String collegeName, String emailId, Long phoneNumber, Date createdAt, Date updatedAt, Boolean deleted) {
+    public EmployeeRecord(String employeeName, String role, String collegeName, String emailId, Long phoneNumber, String branch, Date createdAt, Date updatedAt, Boolean deleted) {
         super();
         this.employeeName = employeeName;
-        this.employeePosition = employeePosition;
+        this.role = role;
         this.collegeName = collegeName;
         this.emailId = emailId;
         this.phoneNumber = phoneNumber;
+        this.branch = branch;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.deleted = deleted;
@@ -71,12 +74,10 @@ public class EmployeeRecord {
         this.employeeName = employeeName;
     }
 
-    public String getEmployeePosition() {
-        return employeePosition;
-    }
+    public String getRole() { return role; }
 
-    public void setEmployeePosition(String employeePosition) {
-        this.employeePosition = employeePosition;
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public String getCollegeName() {
@@ -112,4 +113,8 @@ public class EmployeeRecord {
     public Date getUpdatedAt() { return updatedAt; }
 
     public void setUpdatedAt(Date updatedAt) { this.updatedAt = updatedAt; }
+
+    public String getBranch() { return branch; }
+
+    public void setBranch(String branch) { this.branch = branch; }
 }

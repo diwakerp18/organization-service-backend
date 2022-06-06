@@ -15,7 +15,8 @@ public class EmployeeRecordDtoToEntityConverter {
                 .emailId(employeeRecordDto.getEmailId())
                 .employeeName(employeeRecordDto.getEmployeeName())
                 .phoneNumber(employeeRecordDto.getPhoneNumber())
-                .employeePosition(employeeRecordDto.getEmployeePosition())
+                .role(employeeRecordDto.getRole())
+                .branch(employeeRecordDto.getBranch())
                 .deleted(employeeRecordDto.getDeleted())
                 .build();
 

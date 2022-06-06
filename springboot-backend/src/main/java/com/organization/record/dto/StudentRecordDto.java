@@ -21,6 +21,9 @@ public class StudentRecordDto {
     private String collegeName;
     private String emailId;
     private Long phoneNumber;
+    private String role;
+    private String branch;
+    private  String batch;
     private Boolean deleted;
     private Date createdAt;
     private Date updatedAt;
