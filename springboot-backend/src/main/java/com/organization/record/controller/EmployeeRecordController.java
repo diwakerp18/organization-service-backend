@@ -1,16 +1,16 @@
 package com.organization.record.controller;
 
+import com.organization.record.dto.EmployeeRecordDto;
 import com.organization.record.entity.EmployeeRecord;
 import com.organization.record.exception.OrganizationServiceException;
-import com.organization.record.repository.EmployeeRecordRepo;
+import com.organization.record.service.EmployeeRecordService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
+import javax.validation.Valid;
 import java.util.List;
-import java.util.Map;
 
 import static java.util.Objects.isNull;
 
@@ -19,86 +19,64 @@ import static java.util.Objects.isNull;
 @RestController
 @RequestMapping("employee-record")
 public class EmployeeRecordController {
+
     @Autowired
-    private EmployeeRecordRepo employeeRecordRepo;
+    private EmployeeRecordService employeeRecordService;
 
     // get all employee records
     @GetMapping("/get-all-employee-records")
-    public List<EmployeeRecord> getAllEmployees() throws Exception {
-        log.info("Fetching All Employee Records");
-        List<EmployeeRecord> employeeRecords = employeeRecordRepo.findAllByDeletedFalse();
-        if (isNull(employeeRecords)){
-            throw new OrganizationServiceException("Not A Single Record Found");
-        }
+    public List<EmployeeRecordDto> getAllEmployees() throws Exception {
+        List<EmployeeRecordDto> employeeRecords = employeeRecordService.getEmployeeRecords();
         return employeeRecords;
     }
 
     // create employee record
     @PostMapping("/create-employee-record")
-    public EmployeeRecord createEmployee(@RequestBody EmployeeRecord employeeRecord) throws Exception {
-        log.info("creating new employee record");
-        if (employeeRecord.getDeleted() == null){
-        employeeRecord.setDeleted(false);
+    public EmployeeRecordDto createEmployee(@Valid @RequestBody EmployeeRecordDto employeeRecordDto) throws Exception {
+        EmployeeRecordDto retVal = employeeRecordService.createEmployeeRecord(employeeRecordDto);
+        if (isNull(retVal)){
+            throw new OrganizationServiceException("Record Creation failed");
         }
-        return employeeRecordRepo.save(employeeRecord);
+        return retVal;
     }
 
     // get employee by id
     @GetMapping("/get-employee-record/{id}")
-    public ResponseEntity<EmployeeRecord> getEmployeeById(@PathVariable Long id) throws Exception {
-        log.info("searching for employee with id :"+ id);
-        EmployeeRecord employeeRecord = employeeRecordRepo.findByIdAndAndDeletedFalse(id);
-        if (isNull(employeeRecord)){
-            throw new OrganizationServiceException("No record found with id :"+ id);
+    public ResponseEntity<EmployeeRecordDto> getEmployeeById(@PathVariable Long id) throws Exception {
+        if (isNull(id) || id <= 0){
+            throw new OrganizationServiceException("Student Id should be a positive value");
         }
-        return ResponseEntity.ok(employeeRecord);
+        EmployeeRecordDto employeeRecordDto = employeeRecordService.getEmployeeById(id);
+        return ResponseEntity.ok(employeeRecordDto);
     }
 
     // update employee record
-    @PutMapping("/update-employee-record/{id}")
-    public ResponseEntity<EmployeeRecord> updateEmployee(@PathVariable Long id, @RequestBody EmployeeRecord employeeRecordDetails) throws Exception {
-        EmployeeRecord employeeRecord = employeeRecordRepo.findByIdAndAndDeletedFalse(id);
-        if (isNull(employeeRecord)){
-            throw new OrganizationServiceException("No record found with id :"+ id);
+    @PostMapping("/update-employee-record/{id}")
+    public EmployeeRecord updateEmployee(@PathVariable Long id, @Valid @RequestBody EmployeeRecordDto employeeRecordDto) throws  Exception {
+        if (isNull(id) || id <= 0){
+            throw new OrganizationServiceException("Employee Id should be a positive value");
         }
-        if (employeeRecord.getDeleted() == null){
-            employeeRecord.setDeleted(false);
-        }
-        employeeRecord.setEmployeeName(employeeRecordDetails.getEmployeeName());
-        employeeRecord.setCollegeName(employeeRecordDetails.getCollegeName());
-        employeeRecord.setEmployeePosition(employeeRecordDetails.getEmployeePosition());
-        employeeRecord.setPhoneNumber(employeeRecordDetails.getPhoneNumber());
-        employeeRecord.setEmailId(employeeRecordDetails.getEmailId());
+        employeeRecordDto.setId(id);
 
-        EmployeeRecord updatedEmployeeRecord = employeeRecordRepo.save(employeeRecord);
-        return ResponseEntity.ok(updatedEmployeeRecord);
+        EmployeeRecord retVal = employeeRecordService.updateStudentRecord(employeeRecordDto);
+        if (isNull(retVal)){
+            throw new OrganizationServiceException("Faild to update Employee record");
+        }
+
+        return retVal;
     }
 
     // Hard delete employee record
     @DeleteMapping("/hard-delete-employee-record/{id}")
-    public ResponseEntity<Map<String, Boolean>> hardDeleteEmployee(@PathVariable Long id) throws Exception {
-        log.info("hard deleting employee with id :"+ id);
-        EmployeeRecord employeeRecord = employeeRecordRepo.findByIdAndAndDeletedFalse(id);
-        if (isNull(employeeRecord)){
-            throw new OrganizationServiceException("No record found with id :"+ id);
-        }
-        employeeRecordRepo.delete(employeeRecord);
-        Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<EmployeeRecord> hardDeleteEmployee(@PathVariable Long id) throws Exception {
+        EmployeeRecord employeeRecord = employeeRecordService.hardDeleteEmployee(id);
+        return ResponseEntity.ok(employeeRecord);
     }
 
     // Soft Delete Employee record
     @PostMapping("/soft-delete-employee-record/{id}")
     public ResponseEntity<EmployeeRecord> softDeleteEmployee(@PathVariable Long id) throws Exception {
-        log.info("soft deleting employee with id :"+ id);
-        EmployeeRecord employeeRecord = employeeRecordRepo.findByIdAndAndDeletedFalse(id);
-        if (isNull(employeeRecord)){
-            throw new OrganizationServiceException("No record found with id :"+ id);
-        }
-        Boolean deleted = true;
-        employeeRecord.setDeleted(deleted);
-        employeeRecordRepo.save(employeeRecord);
+        EmployeeRecord employeeRecord = employeeRecordService.softDeleteEmployee(id);
         return ResponseEntity.ok(employeeRecord);
     }
 

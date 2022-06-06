@@ -9,7 +9,6 @@ public class StudentRecordDtoToEntityConverter {
 
     public StudentRecord dtoToEntity(StudentRecordDto studentRecordDto) {
 
-
         StudentRecord studentRecord =  StudentRecord.builder()
                 .id(studentRecordDto.getId())
                 .collegeName(studentRecordDto.getCollegeName())
