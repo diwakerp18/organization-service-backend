@@ -21,7 +21,7 @@ import javax.validation.Valid;
 
 import static java.util.Objects.isNull;
 @Slf4j
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("student-record")
 public class StudentRecordController {
@@ -38,12 +38,13 @@ public class StudentRecordController {
 
 	// create student record
 	@PostMapping("/create-student-record")
-	public StudentRecordDto createStudentRecord(@Valid @RequestBody StudentRecordDto studentRecordDto) throws  Exception {
+	public ResponseEntity<OrganizationServiceException> createStudentRecord(@Valid @RequestBody StudentRecordDto studentRecordDto) throws  Exception {
 		StudentRecordDto retVal = studentRecordService.createStudentRecord(studentRecordDto);
 		if (isNull(retVal)){
-			throw new OrganizationServiceException("Record Creation failed");
+			throw new OrganizationServiceException("Student Record Creation failed");
 		}
-		return retVal;
+
+		return ResponseEntity.ok(new OrganizationServiceException("Sucessfully Created Student Record"));
 	}
 
 	// get student by id
@@ -58,7 +59,7 @@ public class StudentRecordController {
 
 	// update student record
 	@PostMapping("/update-student-record/{id}")
-	public StudentRecord updateStudent(@PathVariable Long id, @Valid @RequestBody StudentRecordDto studentRecordDto) throws  Exception {
+	public ResponseEntity<OrganizationServiceException> updateStudent(@PathVariable Long id, @Valid @RequestBody StudentRecordDto studentRecordDto) throws  Exception {
 		if (isNull(id) || id <= 0){
 			throw new OrganizationServiceException("Student Id should be a positive value");
 		}
@@ -68,8 +69,7 @@ public class StudentRecordController {
 		if (isNull(retVal)){
 			throw new OrganizationServiceException("Faild to update student record");
 		}
-
-		return retVal;
+		return ResponseEntity.ok(new OrganizationServiceException("Sucessfully Updated Student Record"));
 	}
 
 	// Hard delete student record

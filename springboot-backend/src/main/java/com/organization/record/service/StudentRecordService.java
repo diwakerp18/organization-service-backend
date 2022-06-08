@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 import static java.util.Objects.isNull;
+import static org.springframework.data.repository.init.ResourceReader.Type.JSON;
 
 @Service
 @Slf4j

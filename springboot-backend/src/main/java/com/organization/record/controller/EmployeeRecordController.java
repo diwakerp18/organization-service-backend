@@ -15,7 +15,7 @@ import java.util.List;
 import static java.util.Objects.isNull;
 
 @Slf4j
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("employee-record")
 public class EmployeeRecordController {
