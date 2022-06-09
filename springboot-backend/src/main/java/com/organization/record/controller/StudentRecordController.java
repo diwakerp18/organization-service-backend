@@ -74,16 +74,16 @@ public class StudentRecordController {
 
 	// Hard delete student record
 	@DeleteMapping("/hard-delete-student-record/{id}")
-	public ResponseEntity<StudentRecord> hardDeleteStudent(@PathVariable Long id) throws Exception {
+	public ResponseEntity<OrganizationServiceException> hardDeleteStudent(@PathVariable Long id) throws Exception {
 		StudentRecord studentRecord = studentRecordService.hardDeleteStudent(id);
-		return ResponseEntity.ok(studentRecord);
+		return ResponseEntity.ok(new OrganizationServiceException("Sucessfully deleted student with id :" + id));
 	}
 
 	// Soft Delete student record
 	@PostMapping("/soft-delete-student-record/{id}")
-	public ResponseEntity<StudentRecord> softDeleteStudent(@PathVariable Long id) throws Exception {
+	public ResponseEntity<OrganizationServiceException> softDeleteStudent(@PathVariable Long id) throws Exception {
 		StudentRecord studentRecord = studentRecordService.softDeleteStudent(id);
-		return ResponseEntity.ok(studentRecord);
+		return ResponseEntity.ok(new OrganizationServiceException("Sucessfully deleted student with id :" + id));
 	}
 
 }

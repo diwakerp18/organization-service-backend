@@ -14,9 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-
 import static java.util.Objects.isNull;
-import static org.springframework.data.repository.init.ResourceReader.Type.JSON;
 
 @Service
 @Slf4j
@@ -44,10 +42,7 @@ public class StudentRecordService {
     public StudentRecordDto createStudentRecord(StudentRecordDto studentRecordDto) throws Exception {
         log.info("creating new student record");
 
-        if(isNull(studentRecordDto)){
-            throw new OrganizationServiceException("data is empty");
-        }
-
+        checkForNullInputs(studentRecordDto);
         StudentRecord existingStudentRecordForRollNumber = getStudentRecordForRollNumber(studentRecordDto.getRollNumber());
         if (!isNull(existingStudentRecordForRollNumber)) {
             throw new OrganizationServiceException("An StudentRecord Already Exists for rollNumber : "+ studentRecordDto.getRollNumber());
@@ -74,6 +69,8 @@ public class StudentRecordService {
 
     public StudentRecord updateStudentRecord(StudentRecordDto studentRecordDto) throws Exception {
         log.info("searching for student with id :"+ studentRecordDto.getId());
+
+        checkForEmptyInputs(studentRecordDto);
         StudentRecord existingStudentRecord = studentRecordRepo.findByIdAndAndDeletedFalse(studentRecordDto.getId());
         if (isNull(existingStudentRecord)){
             throw new OrganizationServiceException("No Record Found For Id :"+ studentRecordDto.getId());
@@ -119,7 +116,7 @@ public class StudentRecordService {
     public StudentRecord getStudentRecordForRollNumber(Integer rollNumber) throws Exception {
 
         if(isNull(rollNumber)){
-            throw new OrganizationServiceException("rollNumber is null");
+            throw new OrganizationServiceException("rollNumber can`t be empty");
         }
 
         return studentRecordRepo.findFirstByRollNumberAndAndDeletedFalse(rollNumber);
@@ -129,6 +126,56 @@ public class StudentRecordService {
 
         if (isNull(studentRecordDto.getDeleted())){
             studentRecordDto.setDeleted(StudentRecordConstants.DEFAULT_DELETED);
+        }
+        if (isNull(studentRecordDto.getRole())){
+            studentRecordDto.setRole(StudentRecordConstants.DEFAULT_ROLE);
+        }
+    }
+
+    private void checkForNullInputs(StudentRecordDto studentRecordDto) {
+
+        if(isNull(studentRecordDto.getStudentName())){
+            throw new OrganizationServiceException("Student Name Can`t be empty");
+        }
+        if (isNull(studentRecordDto.getCollegeName())){
+            throw new OrganizationServiceException("College Name Can`t be empty");
+        }
+        if (isNull(studentRecordDto.getEmailId())){
+            throw new OrganizationServiceException("Email Id Can`t be empty");
+        }
+        if (isNull(studentRecordDto.getPhoneNumber())){
+            throw new OrganizationServiceException("Phone Number Can`t be empty");
+        }
+        if (isNull(studentRecordDto.getBatch())){
+            throw new OrganizationServiceException("Batch Can`t be empty");
+        }
+        if (isNull(studentRecordDto.getBranch())){
+            throw new OrganizationServiceException("Branch Can`t be empty");
+        }
+    }
+
+    private void checkForEmptyInputs(StudentRecordDto studentRecordDto) {
+
+        if(studentRecordDto.getStudentName().isEmpty()){
+            throw new OrganizationServiceException("Student Name Can`t be empty");
+        }
+        if (studentRecordDto.getCollegeName().isEmpty()){
+            throw new OrganizationServiceException("College Name Can`t be empty");
+        }
+        if (studentRecordDto.getEmailId().isEmpty()){
+            throw new OrganizationServiceException("Email Id Can`t be empty");
+        }
+        if (isNull(studentRecordDto.getPhoneNumber())){
+            throw new OrganizationServiceException("Phone Number Can`t be empty");
+        }
+        if (studentRecordDto.getBatch().isEmpty()){
+            throw new OrganizationServiceException("Batch Can`t be empty");
+        }
+        if (studentRecordDto.getBranch().isEmpty()){
+            throw new OrganizationServiceException("Branch Can`t be empty");
+        }
+        if (isNull(studentRecordDto.getRollNumber())){
+            throw new OrganizationServiceException("Roll Number Can`t be empty");
         }
     }
 
