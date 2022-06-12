@@ -42,9 +42,7 @@ public class EmployeeRecordService {
 
     public EmployeeRecordDto createEmployeeRecord(EmployeeRecordDto employeeRecordDto) throws Exception {
         log.info("creating new employee record");
-        if(isNull(employeeRecordDto)){
-            throw new OrganizationServiceException("data is empty");
-        }
+        checkForNullInputs(employeeRecordDto);
 
         setDefaultValues(employeeRecordDto);
         EmployeeRecord employeeRecord = getEntityToSave(employeeRecordDto);
@@ -67,6 +65,8 @@ public class EmployeeRecordService {
 
     public EmployeeRecord updateStudentRecord(EmployeeRecordDto employeeRecordDto) throws Exception {
         log.info("searching for employee with id :"+ employeeRecordDto.getId());
+        checkForEmptyInputs(employeeRecordDto);
+
         EmployeeRecord existingEmployeeRecord = employeeRecordRepo.findByIdAndAndDeletedFalse(employeeRecordDto.getId());
         if (isNull(existingEmployeeRecord)){
             throw new OrganizationServiceException("No Record Found For Id :"+ employeeRecordDto.getId());
@@ -96,6 +96,8 @@ public class EmployeeRecordService {
 
         employeeRecord.setDeleted(true);
         employeeRecord.setUpdatedAt(new Date());
+        employeeRecordRepo.save(employeeRecord);
+
         return employeeRecord;
     }
 
@@ -111,6 +113,50 @@ public class EmployeeRecordService {
 
         if (isNull(employeeRecordDto.getDeleted())){
             employeeRecordDto.setDeleted(EmployeeRecordConstants.DEFAULT_DELETED);
+        }
+    }
+
+    private void checkForNullInputs(EmployeeRecordDto employeeRecordDto) {
+
+        if(isNull(employeeRecordDto.getEmployeeName())){
+            throw new OrganizationServiceException("Employee Name Can`t be empty");
+        }
+        if (isNull(employeeRecordDto.getCollegeName())){
+            throw new OrganizationServiceException("College Name Can`t be empty");
+        }
+        if (isNull(employeeRecordDto.getEmailId())){
+            throw new OrganizationServiceException("Email Id Can`t be empty");
+        }
+        if (isNull(employeeRecordDto.getPhoneNumber())){
+            throw new OrganizationServiceException("Phone Number Can`t be empty");
+        }
+        if (isNull(employeeRecordDto.getRole())){
+            throw new OrganizationServiceException("Role Can`t be empty");
+        }
+        if (isNull(employeeRecordDto.getBranch())){
+            throw new OrganizationServiceException("Branch Can`t be empty");
+        }
+    }
+
+    private void checkForEmptyInputs(EmployeeRecordDto employeeRecordDto) {
+
+        if(employeeRecordDto.getEmployeeName().isEmpty()){
+            throw new OrganizationServiceException("Employee Name Can`t be empty");
+        }
+        if (employeeRecordDto.getCollegeName().isEmpty()){
+            throw new OrganizationServiceException("College Name Can`t be empty");
+        }
+        if (employeeRecordDto.getEmailId().isEmpty()){
+            throw new OrganizationServiceException("Email Id Can`t be empty");
+        }
+        if (isNull(employeeRecordDto.getPhoneNumber())){
+            throw new OrganizationServiceException("Phone Number Can`t be empty");
+        }
+        if (employeeRecordDto.getRole().isEmpty()){
+            throw new OrganizationServiceException("Role Can`t be empty");
+        }
+        if (employeeRecordDto.getBranch().isEmpty()){
+            throw new OrganizationServiceException("Branch Can`t be empty");
         }
     }
 

@@ -41,8 +41,8 @@ public class StudentRecordService {
 
     public StudentRecordDto createStudentRecord(StudentRecordDto studentRecordDto) throws Exception {
         log.info("creating new student record");
-
         checkForNullInputs(studentRecordDto);
+
         StudentRecord existingStudentRecordForRollNumber = getStudentRecordForRollNumber(studentRecordDto.getRollNumber());
         if (!isNull(existingStudentRecordForRollNumber)) {
             throw new OrganizationServiceException("An StudentRecord Already Exists for rollNumber : "+ studentRecordDto.getRollNumber());
@@ -69,8 +69,8 @@ public class StudentRecordService {
 
     public StudentRecord updateStudentRecord(StudentRecordDto studentRecordDto) throws Exception {
         log.info("searching for student with id :"+ studentRecordDto.getId());
-
         checkForEmptyInputs(studentRecordDto);
+
         StudentRecord existingStudentRecord = studentRecordRepo.findByIdAndAndDeletedFalse(studentRecordDto.getId());
         if (isNull(existingStudentRecord)){
             throw new OrganizationServiceException("No Record Found For Id :"+ studentRecordDto.getId());

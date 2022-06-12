@@ -32,12 +32,13 @@ public class EmployeeRecordController {
 
     // create employee record
     @PostMapping("/create-employee-record")
-    public EmployeeRecordDto createEmployee(@Valid @RequestBody EmployeeRecordDto employeeRecordDto) throws Exception {
+    public ResponseEntity<OrganizationServiceException> createEmployee(@Valid @RequestBody EmployeeRecordDto employeeRecordDto) throws Exception {
         EmployeeRecordDto retVal = employeeRecordService.createEmployeeRecord(employeeRecordDto);
         if (isNull(retVal)){
-            throw new OrganizationServiceException("Record Creation failed");
+            throw new OrganizationServiceException("Employee Record Creation failed");
         }
-        return retVal;
+
+        return ResponseEntity.ok(new OrganizationServiceException("Sucessfully Created Employee Record"));
     }
 
     // get employee by id
@@ -52,7 +53,7 @@ public class EmployeeRecordController {
 
     // update employee record
     @PostMapping("/update-employee-record/{id}")
-    public EmployeeRecord updateEmployee(@PathVariable Long id, @Valid @RequestBody EmployeeRecordDto employeeRecordDto) throws  Exception {
+    public ResponseEntity<OrganizationServiceException> updateEmployee(@PathVariable Long id, @Valid @RequestBody EmployeeRecordDto employeeRecordDto) throws  Exception {
         if (isNull(id) || id <= 0){
             throw new OrganizationServiceException("Employee Id should be a positive value");
         }
@@ -63,21 +64,21 @@ public class EmployeeRecordController {
             throw new OrganizationServiceException("Faild to update Employee record");
         }
 
-        return retVal;
+        return ResponseEntity.ok(new OrganizationServiceException("Sucessfully Updated Employee Record"));
     }
 
     // Hard delete employee record
     @DeleteMapping("/hard-delete-employee-record/{id}")
-    public ResponseEntity<EmployeeRecord> hardDeleteEmployee(@PathVariable Long id) throws Exception {
-        EmployeeRecord employeeRecord = employeeRecordService.hardDeleteEmployee(id);
-        return ResponseEntity.ok(employeeRecord);
+    public ResponseEntity<OrganizationServiceException> hardDeleteEmployee(@PathVariable Long id) throws Exception {
+        employeeRecordService.hardDeleteEmployee(id);
+        return ResponseEntity.ok(new OrganizationServiceException("Sucessfully deleted employee with id :" + id));
     }
 
     // Soft Delete Employee record
     @PostMapping("/soft-delete-employee-record/{id}")
-    public ResponseEntity<EmployeeRecord> softDeleteEmployee(@PathVariable Long id) throws Exception {
-        EmployeeRecord employeeRecord = employeeRecordService.softDeleteEmployee(id);
-        return ResponseEntity.ok(employeeRecord);
+    public ResponseEntity<OrganizationServiceException> softDeleteEmployee(@PathVariable Long id) throws Exception {
+        employeeRecordService.softDeleteEmployee(id);
+        return ResponseEntity.ok(new OrganizationServiceException("Sucessfully deleted employee with id :" + id));
     }
 
 }
