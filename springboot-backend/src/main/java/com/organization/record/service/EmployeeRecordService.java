@@ -63,7 +63,7 @@ public class EmployeeRecordService {
         return employeeRecordDto;
     }
 
-    public EmployeeRecord updateStudentRecord(EmployeeRecordDto employeeRecordDto) throws Exception {
+    public EmployeeRecord updateEmployeeRecord(EmployeeRecordDto employeeRecordDto) throws Exception {
         log.info("searching for employee with id :"+ employeeRecordDto.getId());
         checkForEmptyInputs(employeeRecordDto);
 

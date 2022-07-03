@@ -59,7 +59,7 @@ public class EmployeeRecordController {
         }
         employeeRecordDto.setId(id);
 
-        EmployeeRecord retVal = employeeRecordService.updateStudentRecord(employeeRecordDto);
+        EmployeeRecord retVal = employeeRecordService.updateEmployeeRecord(employeeRecordDto);
         if (isNull(retVal)){
             throw new OrganizationServiceException("Faild to update Employee record");
         }
