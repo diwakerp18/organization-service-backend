@@ -4,7 +4,9 @@ import com.organization.record.converter.EmployeeRecordDtoToEntityConverter;
 import com.organization.record.converter.EmployeeRecordDtoToExistingEntityConverter;
 import com.organization.record.converter.EmployeeRecordEntityToDtoConverter;
 import com.organization.record.dto.EmployeeRecordDto;
+import com.organization.record.dto.StudentRecordDto;
 import com.organization.record.entity.EmployeeRecord;
+import com.organization.record.entity.StudentRecord;
 import com.organization.record.exception.OrganizationServiceException;
 import com.organization.record.helper.consts.EmployeeRecordConstants;
 import com.organization.record.repository.EmployeeRecordRepo;
@@ -28,6 +30,10 @@ public class EmployeeRecordService {
     EmployeeRecordDtoToEntityConverter employeeRecordDtoToEntityConverter;
     @Autowired
     EmployeeRecordDtoToExistingEntityConverter employeeRecordDtoToExistingEntityConverter;
+    @Autowired
+    BranchService branchService;
+    @Autowired
+    RoleService roleService;
 
     public List<EmployeeRecordDto> getEmployeeRecords() throws Exception {
         log.info("Fetching All Employee Records");
@@ -107,6 +113,30 @@ public class EmployeeRecordService {
         employeeRecord.setCreatedAt(new Date());
         employeeRecord.setUpdatedAt(new Date());
         return employeeRecord;
+    }
+
+    public List<EmployeeRecordDto> getEmployeesWithFilters(String branch, String role) throws Exception {
+        getVerified(branch, role);
+        log.info("Fetching All Employees Records With Branch {} And Role {} ", branch, role);
+        List<EmployeeRecord> employeeRecords = employeeRecordRepo.findByBranchAndRoleAndDeletedFalse(branch, role);
+        if (employeeRecords.isEmpty()){
+            throw new OrganizationServiceException("Not A Single Record Found");
+        }
+
+        List<EmployeeRecordDto> employeeRecordDtos = employeeRecordEntityToDtoConverter.entityToDto(employeeRecords);
+        return employeeRecordDtos;
+    }
+
+    private void getVerified(String branch, String role) throws Exception {
+        if (isNull(branch)){
+            throw new OrganizationServiceException("branch can`t` be empty");
+        }
+        branchService.verifyBranch(branch);
+
+        if (isNull(role)){
+            throw new OrganizationServiceException("role can`t` be empty");
+        }
+        roleService.verifyRole(role);
     }
 
     private void setDefaultValues(EmployeeRecordDto employeeRecordDto) {

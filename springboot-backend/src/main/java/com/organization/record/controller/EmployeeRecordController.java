@@ -1,6 +1,7 @@
 package com.organization.record.controller;
 
 import com.organization.record.dto.EmployeeRecordDto;
+import com.organization.record.dto.StudentRecordDto;
 import com.organization.record.entity.EmployeeRecord;
 import com.organization.record.exception.OrganizationServiceException;
 import com.organization.record.service.EmployeeRecordService;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.ws.rs.QueryParam;
 import java.util.List;
 
 import static java.util.Objects.isNull;
@@ -79,6 +81,12 @@ public class EmployeeRecordController {
     public ResponseEntity<OrganizationServiceException> softDeleteEmployee(@PathVariable Long id) throws Exception {
         employeeRecordService.softDeleteEmployee(id);
         return ResponseEntity.ok(new OrganizationServiceException("Sucessfully deleted employee with id :" + id));
+    }
+
+    @GetMapping("/get-employees-by-filter")
+    public List<EmployeeRecordDto> getEmployeesWithFilters(@QueryParam("branch") String branch, @QueryParam("role") String role) throws Exception {
+        List<EmployeeRecordDto> employeeRecords = employeeRecordService.getEmployeesWithFilters(branch, role);
+        return employeeRecords;
     }
 
 }
