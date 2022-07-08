@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface BatchRepo extends JpaRepository<Batch, Long> {
     List<Batch> findAllByDeletedFalse();
+    Batch findByBatchAndAndDeletedFalse(String batch);
 }

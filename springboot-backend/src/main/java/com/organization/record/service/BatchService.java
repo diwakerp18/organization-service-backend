@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static java.util.Objects.isNull;
+
 @Service
 @Slf4j
 public class BatchService {
@@ -28,5 +30,17 @@ public class BatchService {
 
         List<BatchDto> batchDtos = batchEntityToDtoCoverter.entityToDto(batches);
         return batchDtos;
+    }
+
+    public void verifyBatch(String batch) throws Exception {
+        if (batch.isEmpty()){
+            throw new OrganizationServiceException("batch number can`t be empty");
+        }
+
+        log.info("verifying the batch number : " + batch);
+        Batch batchNo = batchRepo.findByBatchAndAndDeletedFalse(batch);
+        if (isNull(batchNo)){
+            throw new OrganizationServiceException("Batch Number You Have Entered Was Incorrect, We Only have These Listed Batches : 2017-2021, 2018-2022, 2019-2023, 2020-2024, 2021-2025, 2022-2026");
+        }
     }
 }
