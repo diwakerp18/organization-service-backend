@@ -1,7 +1,6 @@
 package com.organization.record.controller;
 
 import com.organization.record.dto.EmployeeRecordDto;
-import com.organization.record.dto.StudentRecordDto;
 import com.organization.record.entity.EmployeeRecord;
 import com.organization.record.exception.OrganizationServiceException;
 import com.organization.record.service.EmployeeRecordService;
@@ -83,6 +82,7 @@ public class EmployeeRecordController {
         return ResponseEntity.ok(new OrganizationServiceException("Sucessfully deleted employee with id :" + id));
     }
 
+    // Get Employee Records With Filter
     @GetMapping("/get-employees-by-filter")
     public List<EmployeeRecordDto> getEmployeesWithFilters(@QueryParam("branch") String branch, @QueryParam("role") String role) throws Exception {
         List<EmployeeRecordDto> employeeRecords = employeeRecordService.getEmployeesWithFilters(branch, role);

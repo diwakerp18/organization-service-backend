@@ -87,12 +87,14 @@ public class StudentRecordController {
 		return ResponseEntity.ok(new OrganizationServiceException("Sucessfully deleted student with id :" + id));
 	}
 
+	// Get Student Record By Roll Number
 	@GetMapping("/get-student/{rollNumber}")
 	public ResponseEntity<StudentRecord> getStudentDetailsByRoll(@PathVariable Integer rollNumber) throws Exception {
 		StudentRecord studentRecord = studentRecordService.getStudentRecordForRollNumber(rollNumber);
 		return ResponseEntity.ok(studentRecord);
 	}
 
+	// Get Student Records With Filter
 	@GetMapping("/get-students-by-filter")
 	public List<StudentRecordDto> getStudentsWithFilters(@QueryParam("branch") String branch, @QueryParam("batch") String batch, @QueryParam("role") String role) throws Exception {
 		List<StudentRecordDto> studentRecords = studentRecordService.getStudentsWithFilters(branch, batch, role);
