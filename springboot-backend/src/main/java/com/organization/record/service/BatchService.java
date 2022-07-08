@@ -3,7 +3,6 @@ package com.organization.record.service;
 import com.organization.record.converter.BatchEntityToDtoCoverter;
 import com.organization.record.dto.BatchDto;
 import com.organization.record.entity.Batch;
-import com.organization.record.entity.Branch;
 import com.organization.record.exception.OrganizationServiceException;
 import com.organization.record.repository.BatchRepo;
 import lombok.extern.slf4j.Slf4j;
