@@ -7,6 +7,7 @@ import com.organization.record.exception.OrganizationServiceException;
 import com.organization.record.service.StudentRecordService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import javax.ws.rs.QueryParam;
 
 import static java.util.Objects.isNull;
 @Slf4j
@@ -85,5 +87,18 @@ public class StudentRecordController {
 		studentRecordService.softDeleteStudent(id);
 		return ResponseEntity.ok(new OrganizationServiceException("Sucessfully deleted student with id :" + id));
 	}
+
+	@GetMapping("/get-student/{rollNumber}")
+	public ResponseEntity<StudentRecord> getStudentDetailsByRoll(@PathVariable Integer rollNumber) throws Exception {
+		StudentRecord studentRecord = studentRecordService.getStudentRecordForRollNumber(rollNumber);
+		return ResponseEntity.ok(studentRecord);
+	}
+
+	@GetMapping("/get-students-by-filter")
+	public List<StudentRecordDto> getStudentsWithFilters(@QueryParam("branch") String branch, @QueryParam("batch") String batch, @QueryParam("role") String role) throws Exception {
+		List<StudentRecordDto> studentRecords = studentRecordService.getStudentsWithFilters(branch, batch, role);
+		return studentRecords;
+	}
+
 
 }

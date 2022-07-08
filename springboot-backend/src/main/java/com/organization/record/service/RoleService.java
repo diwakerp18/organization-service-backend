@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static java.util.Objects.isNull;
+
 @Service
 @Slf4j
 public class RoleService {
@@ -28,5 +30,18 @@ public class RoleService {
 
         List<RoleDto> roleDtos = roleEntityToDtoConverter.entityToDto(roles);
         return roleDtos;
+    }
+
+
+    public void verifyRole(String role) throws Exception {
+        if (role.isEmpty()){
+            throw new OrganizationServiceException("role can`t be empty");
+        }
+
+        log.info("verifying the role : " + role);
+        Role roleV2 = roleRepo.findByRoleAndDeletedFalse(role);
+        if (isNull(roleV2)){
+            throw new OrganizationServiceException("Role You Have Entered Was Incorrect, We Only have These Listed Roles : Admin, Dean, Hod, Assistant Professor, Network Admin, Accountant, Registrar, Student");
+        }
     }
 }

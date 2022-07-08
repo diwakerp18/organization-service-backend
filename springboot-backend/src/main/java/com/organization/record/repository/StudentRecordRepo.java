@@ -12,4 +12,5 @@ public interface StudentRecordRepo extends JpaRepository<StudentRecord, Long>{
     List<StudentRecord> findAllByDeletedFalse();
     StudentRecord findFirstByRollNumberAndAndDeletedFalse(Integer rollNumber);
     StudentRecord findByIdAndAndDeletedFalse(Long id);
+    List<StudentRecord> findByBranchAndBatchAndAndRoleAndDeletedFalse(String branch, String batch, String role);
 }

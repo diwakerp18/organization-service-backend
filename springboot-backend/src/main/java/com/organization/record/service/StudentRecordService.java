@@ -3,7 +3,10 @@ package com.organization.record.service;
 import com.organization.record.converter.StudentRecordDtoToEntityConverter;
 import com.organization.record.converter.StudentRecordDtoToExistingEntityConverter;
 import com.organization.record.converter.StudentRecordEntityToDtoConverter;
+import com.organization.record.dto.BranchDto;
 import com.organization.record.dto.StudentRecordDto;
+import com.organization.record.entity.Branch;
+import com.organization.record.entity.Role;
 import com.organization.record.entity.StudentRecord;
 import com.organization.record.exception.OrganizationServiceException;
 import com.organization.record.helper.consts.StudentRecordConstants;
@@ -27,6 +30,12 @@ public class StudentRecordService {
     StudentRecordDtoToEntityConverter studentRecordDtoToEntityConverter;
     @Autowired
     StudentRecordDtoToExistingEntityConverter studentRecordDtoToExistingEntityConverter;
+    @Autowired
+    BranchService branchService;
+    @Autowired
+    BatchService batchService;
+    @Autowired
+    RoleService roleService;
 
     public List<StudentRecordDto> getStudentRecords() throws Exception {
         log.info("Fetching All Students Records");
@@ -115,11 +124,47 @@ public class StudentRecordService {
 
     public StudentRecord getStudentRecordForRollNumber(Integer rollNumber) throws Exception {
 
-        if(isNull(rollNumber)){
-            throw new OrganizationServiceException("rollNumber can`t be empty");
+        if (isNull(rollNumber) || rollNumber <= 0){
+            throw new OrganizationServiceException("Student Name Can`t Be Empty or Negative or Zero");
         }
 
-        return studentRecordRepo.findFirstByRollNumberAndAndDeletedFalse(rollNumber);
+        log.info("Searching for student details with roll-number : " + rollNumber);
+        StudentRecord studentRecord = studentRecordRepo.findFirstByRollNumberAndAndDeletedFalse(rollNumber);
+
+        if (isNull(studentRecord)){
+            throw new OrganizationServiceException("Student Record Not Found For Roll-Number : " + rollNumber);
+        }
+
+        return studentRecord;
+    }
+
+    public List<StudentRecordDto> getStudentsWithFilters(String branch, String batch, String role) throws Exception {
+        getVerified(branch, batch, role);
+        log.info("Fetching All Students Records With Branch {}, Batch {}, And Role {} ", branch, batch, role);
+        List<StudentRecord> studentRecords = studentRecordRepo.findByBranchAndBatchAndAndRoleAndDeletedFalse(branch, batch, role);
+        if (studentRecords.isEmpty()){
+            throw new OrganizationServiceException("Not A Single Record Found");
+        }
+
+        List<StudentRecordDto> studentRecordDtos = studentRecordEntityToDtoConverter.entityToDto(studentRecords);
+        return studentRecordDtos;
+    }
+
+    private void getVerified(String branch, String batch, String role) throws Exception {
+        if (isNull(branch)){
+            throw new OrganizationServiceException("branch can`t` be empty");
+        }
+        branchService.verifyBranch(branch);
+
+        if (isNull(batch)){
+            throw new OrganizationServiceException("batch can`t` be empty");
+        }
+        batchService.verifyBatch(batch);
+
+        if (isNull(role)){
+            throw new OrganizationServiceException("role can`t` be empty");
+        }
+        roleService.verifyRole(role);
     }
 
     private void setDefaultValues(StudentRecordDto studentRecordDto) {

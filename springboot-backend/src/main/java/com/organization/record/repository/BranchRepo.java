@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface BranchRepo extends JpaRepository<Branch, Long> {
     List<Branch> findAllByDeletedFalse();
+    Branch findByBranchAndAndDeletedFalse(String name);
 }

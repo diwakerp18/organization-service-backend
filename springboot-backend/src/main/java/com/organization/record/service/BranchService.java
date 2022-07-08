@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static java.util.Objects.isNull;
+
 @Service
 @Slf4j
 public class BranchService {
@@ -28,5 +30,17 @@ public class BranchService {
 
         List<BranchDto> branchDtos = branchEntityToDtoConverter.entityToDto(branches);
         return branchDtos;
+    }
+
+    public void verifyBranch(String name) throws Exception {
+        if (name.isEmpty()){
+            throw new OrganizationServiceException("Name of the branch can`t be empty");
+        }
+
+        log.info("verifying the branch name : " + name);
+        Branch branch = branchRepo.findByBranchAndAndDeletedFalse(name);
+        if (isNull(branch)){
+            throw new OrganizationServiceException("Branch Name You Have Entered Was Incorrect, We Only have These Listed Branches : ADMIN, CSE, MECH, ECE, CIVIL, PHARMA, NETWORK");
+        }
     }
 }
